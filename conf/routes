@@ -1,0 +1,64 @@
+
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# An example controller showing a sample home page
+GET     /                           controllers.ProductController.index
+# An example controller showing how to use dependency injection
+GET     /count                      controllers.CountController.count
+# An example controller showing how to write asynchronous code
+GET     /message                    controllers.AsyncController.message
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+
+
+POST    /category                   controllers.ProductController.createCategory
+GET     /categories                 controllers.ProductController.getCategories
+PUT     /category/:id               controllers.ProductController.changeCategory(id: Long)
+DELETE  /category/:id               controllers.ProductController.deleteCategory(id: Long)
+
+POST    /product                    controllers.ProductController.createProduct
+GET     /products                   controllers.ProductController.getProducts
+PUT     /product/:id                controllers.ProductController.changeProduct(id: Long)
+DELETE  /product/:id                controllers.ProductController.deleteProduct(id: Long)
+
+POST    /user/register                   controllers.UserController.registerUser
+POST    /user/login                      controllers.UserController.loginUser
+GET     /user/:id                   controllers.UserController.getUser(id: Long)
+PUT     /user/:id                   controllers.UserController.updateUser(id: Long)
+DELETE  /user/:id                   controllers.UserController.deleteUser(id: Long)
+
+POST    /payment                    controllers.ProductController.commitPayment
+GET     /payment                    controllers.ProductController.payment
+DELETE  /payment                    controllers.ProductController.discardPayment
+
+POST    /comment                    controllers.UserController.postOpinion
+GET     /comments                   controllers.UserController.getOpinions
+PUT     /comment/:id                controllers.UserController.updateOpinion(id: Long)
+DELETE  /commment/:id               controllers.UserController.deleteOpinion(id: Long)
+
+GET     /user/:id/basket            controllers.UserController.getBaset(id: Long)
+PUT     /user/:id/basket            controllers.UserController.updateBasket(id: Long)
+DELETE  /user/:id/basket            controllers.UserController.deleteFromBasket(id: Long)
+
+POST    /user/:id/wishlist          controllers.UserController.createWishList(id: Long)
+GET     /user/:id/wishlist          controllers.UserController.getWishList(id: Long)
+PUT     /user/:id/wishlist          controllers.UserController.addToWishList(id: Long)
+DELETE  /user/:id/wishlist          controllers.UserController.deleteWishList(id: Long)
+
+POST    /user/:id/shipment          controllers.UserController.createShipment(id: Long)
+GET     /user/:id/shipment          controllers.UserController.getShipment(id: Long)
+PUT     /user/:id/shipment          controllers.UserController.addToShipment(id: Long)
+DELETE  /user/:id/shipment          controllers.UserController.deleteShipment(id: Long)
+
+POST    /user/:id/mark              controllers.UserController.addScore(id: Long)
+GET     /user/:id/mark              controllers.UserController.getScore(id: Long)
+PUT     /user/:id/mark              controllers.UserController.updateScore(id: Long)
+DELETE  /user/:id/mark              controllers.UserController.removeScore(id: Long)
+
+POST    /promotion                  controllers.ProductController.addPromotion
+GET     /promotion                  controllers.ProductController.getPromotion
+PUT     /promotion                  controllers.ProductController.updatePromotion
+DELETE  /promotion                  controllers.ProductController.deletePromotion
