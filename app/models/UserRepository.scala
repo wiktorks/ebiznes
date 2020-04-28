@@ -7,19 +7,19 @@ import scala.concurrent.{ Future, ExecutionContext }
 
 @Singleton
 class UserRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
-  private val dbConfig = dbConfigProvider.get[JdbcProfile]
+  val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
 
-  private class UserTable(tag: Tag) extends Table[User](tag, "user") {
+  class UserTable(tag: Tag) extends Table[User](tag, "user") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def name = column[String]("name")
 
     def * = (id, name) <> ((User.apply _).tupled, User.unapply)
   }
 
-  private val user = TableQuery[User]
+  private val user = TableQuery[UserTable]
 
   def create(name: String): Future[User] = db.run {
     (user.map(p => (p.name))
@@ -33,11 +33,11 @@ class UserRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implic
   }
 
   def getByName(name: String): Future[Any] = db.run {
-    user.filter(_.name == name)(implicitly).result
+    user.filter(_.name === name).result
   }
 
 
   def getById(id: Long): Future[Any] = db.run {
-    user.filter(_.id == id)(implicitly).result.head
+    user.filter(_.id === id).result.head
   }
 }

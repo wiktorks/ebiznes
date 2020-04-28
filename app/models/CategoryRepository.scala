@@ -7,19 +7,19 @@ import scala.concurrent.{ Future, ExecutionContext }
 
 @Singleton
 class CategoryRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
-  private val dbConfig = dbConfigProvider.get[JdbcProfile]
+  val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
 
-  private class CategoryTable(tag: Tag) extends Table[Category](tag, "category") {
+  class CategoryTable(tag: Tag) extends Table[Category](tag, "category") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def name = column[String]("name")
 
     def * = (id, name) <> ((Category.apply _).tupled, Category.unapply)
   }
 
-  private val category = TableQuery[Category]
+  private val category = TableQuery[CategoryTable]
 
   def create(name: String): Future[User] = db.run {
     (category.map(p => (p.name))
@@ -33,11 +33,11 @@ class CategoryRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(im
   }
 
   def getByName(name: String): Future[Any] = db.run {
-    category.filter(_.name == name)(implicitly).result
+    category.filter(_.name === name).result
   }
 
 
   def getById(id: Long): Future[Any] = db.run {
-    category.filter(_.id == id)(implicitly).result.head
+    category.filter(_.id === id).result.head
   }
 }
