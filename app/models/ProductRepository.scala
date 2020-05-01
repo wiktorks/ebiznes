@@ -7,14 +7,14 @@ import scala.concurrent.{ Future, ExecutionContext }
 
 @Singleton
 class ProductRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, categoryRepository: CategoryRepository, userRepository: UserRepository)(implicit ec: ExecutionContext) {
-  private val dbConfig = dbConfigProvider.get[JdbcProfile]
+  val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
 
-  private val prodRepo = TableQuery[ProductTable]
-  private val catRepo = TableQuery[categoryRepository.CategoryTable]
-  private val userRepo = TableQuery[userRepository.UserTable]
+  val prodRepo = TableQuery[ProductTable]
+//  val catRepo = TableQuery[categoryRepository.CategoryTable]
+//  val userRepo = TableQuery[userRepository.UserTable]
 
   class ProductTable(tag: Tag) extends Table[Product](tag, "product") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
@@ -23,8 +23,8 @@ class ProductRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, cat
     def category = column[Long]("category")
     def user = column[Long]("user")
 
-    def category_fk = foreignKey("category_fk", category, catRepo)(_.id)
-    def user_fk = foreignKey("user_fk", user, userRepo)(_.id)
+    //def category_fk = foreignKey("category_fk", category, catRepo)(_.id)
+    // user_fk = foreignKey("user_fk", user, userRepo)(_.id)
 
     def * = (id, name, description, category, user) <> ((Product.apply _).tupled, Product.unapply)
   }
@@ -38,7 +38,7 @@ class ProductRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, cat
       ) += (name, description,category, user)
   }
 
-  def list(): Future[Any] = db.run {
+  def list(): Future[Seq[Product]] = db.run {
     prodRepo.result
   }
 

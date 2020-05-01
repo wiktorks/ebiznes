@@ -7,13 +7,13 @@ import scala.concurrent.{ Future, ExecutionContext }
 
 @Singleton
 class UserDataRepository @Inject()(dbConfigProvider: DatabaseConfigProvider, userRepository: UserRepository)(implicit ec: ExecutionContext) {
-  private val dbConfig = dbConfigProvider.get[JdbcProfile]
+  val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
 
-  private val userRepo = TableQuery[userRepository.UserTable]
-  private val userDataRepo = TableQuery[UserDataTable]
+//  val userRepo = TableQuery[userRepository.UserTable]
+  val userDataRepo = TableQuery[UserDataTable]
 
   class UserDataTable(tag: Tag) extends Table[UserData](tag, "userData") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
@@ -25,7 +25,7 @@ class UserDataRepository @Inject()(dbConfigProvider: DatabaseConfigProvider, use
     def street = column[String]("street")
     def user = column[Long]("user_fk")
 
-    def user_fk = foreignKey("user_fk", user, userRepo)
+//    def user_fk = foreignKey("user_fk", user, userRepo)
 
     def * = (id, email, surname, phone, country, city, street, user) <> ((UserData.apply _).tupled, UserData.unapply)
   }

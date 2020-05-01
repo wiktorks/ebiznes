@@ -2,13 +2,17 @@ package controllers
 
 import javax.inject._
 import play.api.mvc._
+import akka.actor.ActorSystem
+import models.ProductRepository
 
+import scala.concurrent.duration._
+import scala.concurrent.{ExecutionContext, Future, Promise}
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
  */
 @Singleton
-class ProductController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class ProductController @Inject()(productRepo: ProductRepository, cc: ControllerComponents) (implicit ec: ExecutionContext) extends AbstractController(cc) {
 
   /**
    * Create an Action to render an HTML page with a welcome message.
@@ -36,11 +40,12 @@ class ProductController @Inject()(cc: ControllerComponents) extends AbstractCont
   def createProduct: Action[AnyContent] = Action {
     Ok(<h1>Stworzono produkt</h1>).as(HTML)
   }
-  def getProducts: Action[AnyContent] = Action {
-    Ok(<h1>Pobrano produkty</h1>).as(HTML)
+  def getProducts: Action[AnyContent] = Action.async { implicit  request =>
+    val produkty = productRepo.list()
+    produkty.map(products => Ok(views.html.products(products)))
   }
   def changeProduct(id: Long): Action[AnyContent] = Action {
-    Ok(<h1>Zaktualizowano produkt</h1>).as(HTML)
+    Ok(<h1>Stworzono produkt</h1>).as(HTML)
   }
   def deleteProduct(id: Long): Action[AnyContent] = Action {
     Ok(<h1>Usunięto produkt</h1>).as(HTML)

@@ -30,7 +30,7 @@ class UserController @Inject()(cc: ControllerComponents) extends AbstractControl
   def updateOpinion(id: Long): Action[AnyContent] = Action {
     Ok(<h1>Zaktualizowano opinię</h1>).as(HTML)
   }
-  def deleteOpinion: Action[AnyContent] = Action {
+  def deleteOpinion(id: Long): Action[AnyContent] = Action {
     Ok(<h1>Usunięto opinię</h1>).as(HTML)
   }
 

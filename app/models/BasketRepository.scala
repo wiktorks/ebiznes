@@ -7,14 +7,14 @@ import scala.concurrent.{ Future, ExecutionContext }
 
 @Singleton
 class BasketRepository @Inject()(dbConfigProvider: DatabaseConfigProvider, userRepository: UserRepository, productRepository: ProductRepository)(implicit ec: ExecutionContext) {
-  private val dbConfig = dbConfigProvider.get[JdbcProfile]
+  val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
-
-  private val userRepo = TableQuery[userRepository.UserTable]
-  private val productRepo = TableQuery[productRepository.ProductTable]
-  private val basketRepo = TableQuery[BasketTable]
+//
+//  val userRepo = TableQuery[userRepository.UserTable]
+//  val productRepo = TableQuery[productRepository.ProductTable]
+  val basketRepo = TableQuery[BasketTable]
 
   class BasketTable(tag: Tag) extends Table[Basket](tag, "basket") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
@@ -22,8 +22,8 @@ class BasketRepository @Inject()(dbConfigProvider: DatabaseConfigProvider, userR
     def user = column[Long]("user")
     def product = column[Long]("product")
 
-    def user_fk = foreignKey("user_fk", user, userRepo)
-    def product_fk = foreignKey("product_fk", product, productRepo)
+//    def user_fk = foreignKey("user_fk", user, userRepo)
+//    def product_fk = foreignKey("product_fk", product, productRepo)
 
     def * = (id, quantity, user, product) <> ((Basket.apply _).tupled, Basket.unapply)
   }

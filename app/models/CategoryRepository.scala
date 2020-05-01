@@ -19,7 +19,7 @@ class CategoryRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(im
     def * = (id, name) <> ((Category.apply _).tupled, Category.unapply)
   }
 
-  private val category = TableQuery[CategoryTable]
+  val category = TableQuery[CategoryTable]
 
   def create(name: String): Future[User] = db.run {
     (category.map(p => (p.name))

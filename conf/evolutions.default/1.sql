@@ -64,7 +64,8 @@ CREATE TABLE "payments" (
 CREATE TABLE "shipment" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "address" VARCHAR NOT NULL,
-    "user" INT NOT NULL
+    "user" INT NOT NULL,
+    FOREIGN KEY(user) references user(id)
 )
 
 CREATE TABLE "shipmentState" (
@@ -73,6 +74,9 @@ CREATE TABLE "shipmentState" (
     "shipment" INT NOT NULL,
     FOREIGN KEY(shipment) references shipment(id)
 )
+
+INSERT INTO "products"("name") VALUES("sample1")
+INSERT INTO "products"("name") VALUES("sample2")
 
 # --- !Downs
 
