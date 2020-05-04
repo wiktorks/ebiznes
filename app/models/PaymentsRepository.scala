@@ -12,8 +12,6 @@ class PaymentsRepository @Inject()(dbConfigProvider: DatabaseConfigProvider, use
   import dbConfig._
   import profile.api._
 
-//  val userRepo = TableQuery[userRepository.UserTable]
-//  val basketRepo = TableQuery[basketRepository.BasketTable]
   val paymentsRepo = TableQuery[PaymentsTable]
 
   class PaymentsTable(tag: Tag) extends Table[Payments](tag, "payments") {
@@ -22,8 +20,6 @@ class PaymentsRepository @Inject()(dbConfigProvider: DatabaseConfigProvider, use
     def user = column[Long]("user")
     def basket = column[Long]("basket")
 
-//    def user_fk = foreignKey("user_fk", user, userRepo)
-//    def basket_fk = foreignKey("basket_fk", basket, basketRepo)
 
     def * = (id, amount, user, basket) <> ((Payments.apply _).tupled, Payments.unapply)
   }
